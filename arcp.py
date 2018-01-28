@@ -43,7 +43,7 @@ def _reg_name_regex():
     # reg-name    = *( unreserved / pct-encoded / sub-delims )    
     reg_name = r"(" + unreserved + r"|" + pct_encoded + sub_delims + r")*"
     return re.compile(reg_name)
-REG_NAME = _reg_name_regex()
+_REG_NAME = _reg_name_regex()
 
 def arcp_uuid(uuid, path="/", query=None, fragment=None):
     if not isinstance(uuid, UUID):
