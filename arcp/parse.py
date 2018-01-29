@@ -14,6 +14,18 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
+"""
+Parse arcp URIs.
+
+Use is_arcp_uri() to detect of an URI string is using the 
+arcp: URI scheme, in which case parse_arcp() can be used
+to split it into its components.
+
+The urlparse() function can be used as a replacement for
+urllib.parse.urlparse() - supporting any URIs. If the URI is 
+using the arcp: URI scheme, additional components are available
+as from parse_arcp().
+"""
 
 from uuid import UUID, NAMESPACE_URL
 import urllib.parse as urlp
@@ -23,13 +35,40 @@ from binascii import hexlify
 SCHEME="arcp"
 
 def is_arcp_uri(uri):
+    """Return True if the uri string uses the arcp scheme, otherwise False.
+    """
+
     # tip: urllib will do lowercase for us
     return urlp.urlparse(uri).scheme == SCHEME
 
 def parse_arcp(uri):
+    """Parse an arcp URI string into its constituent parts.
+
+    The returned object is similar to ``urllib.parse.urlparse()``
+    in that it is a tuple of 
+    (scheme,netloc,path,params,query,fragment)
+    with equally named properties, but it also adds
+    properties for arcp fields:
+    
+    - prefix -- arcp authority prefix, e.g. "uuid", "ni" or "name", or None if prefix is missing
+    - name -- arcp authority without prefix, e.g. "a4889890-a50a-4f14-b4e7-5fd83683a2b5" or "example.com"
+    - uuid -- a ``uuid.UUID`` object if prefix is "uuid", otherwise None
+    - ni -- the arcp alg-val value according to RFC6920 if prefix is "ni", otherwise None
+    - hash -- the hash method and hash as a hexstring if prefix is "ni", otherwise None
+    """
+
     return ARCPParseResult(*urlp.urlparse(uri))
 
 def urlparse(uri):
+    """Parse any URI string into constituent parts.
+
+    The returned object is similar to ``urllib.parse.urlparse()``
+    in that it is a tuple of 
+    (scheme,netloc,path,params,query,fragment)
+    with equally named properties, but if the 
+    URI scheme is "arcp" this also adds
+    arcp properties as in ``parse_arcp()``.
+    """
     u = urlp.urlparse(uri)    
     if (u.scheme == SCHEME):
         return ARCPParseResult(*u)
@@ -37,15 +76,27 @@ def urlparse(uri):
         return u
 
 class ARCPParseResult(urlp.ParseResult):
+    """Result of parsing an arcp URI.
+
+    This class does not detect if the arcp URI was valid
+    according to the specification.
+
+    This class extends urlllib.parse.ParseResult
+    adding arcp properties, which may be None.
+    """
     __slots__ = ()
 
     def __init__(self, *args):
         if self.scheme != SCHEME:
             raise Exception("uri has scheme %s, expected %s" % 
                             (self.scheme, SCHEME))
+        if not self.netloc:
+            raise Exception("uri has empty authority")
 
-    @property
     def _host_split(self):
+        """Return (prefix,name) if authority has "," - 
+        otherwise (None, authority).
+        """
         if "," in self.netloc:
             return self.netloc.split(",", 1)
         else:
@@ -53,22 +104,28 @@ class ARCPParseResult(urlp.ParseResult):
 
     @property
     def prefix(self):
-        (prefix,name) = self._host_split
+        """The arcp prefix, e.g. "uuid", "ni", "name" or None if no prefix was present.
+        """
+        (prefix,name) = self._host_split()
         return prefix
 
     @property
     def name(self):
-        (prefix,name) = self._host_split
+        """The URI's authority without arcp prefix.
+        """
+        (prefix,name) = self._host_split()
         return name
     
     @property
     def uuid(self):
+        """The arcp UUID if the prefix is "uuid", otherwise None."""
         if self.prefix != "uuid":
             return None
         return UUID(self.name)
     
     @property
     def ni(self):
+        """The arcp ni string if the prefix is "ni", otherwise None."""
         if self.prefix != "ni":
             return None
         # TODO: Validate algval?
@@ -76,7 +133,47 @@ class ARCPParseResult(urlp.ParseResult):
         return algval
     
     @property
+    def ni_uri(self, authority=""):
+        """The ni URI if the prefix is "ni", otherwise None.
+        
+        If the authority parameter is provided, it will be used in the returned URI.
+        """
+        ni = self.ni
+        if ni is None:
+            return None
+        s = ("ni", authority, ni, None, None)
+        return urlp.urlunsplit(s)
+
+    @property
+    def nih_uri(self, authority=""):
+        """The nih URI if the prefix is "ni", otherwise None.
+        
+        If the authority parameter is provided, it will be used in the returned URI.
+        """
+        h = self.hash
+        if h is None:
+            return None
+        path = "%s;%s" % h
+        s = ("nih", authority, ni, path, None)
+        return urlp.urlunsplit(s)
+    
+    @property
+    def ni_well_known(self, base=""):
+        """The ni .well_known URI if the prefix is "ni", otherwise None.
+
+        The parameter base should be an absolute URI like 
+        "http://example.com/"
+        """
+        ni = self.ni
+        if ni is None:
+            return None        
+        path = ".well-known/ni/" + ni 
+        return urlp.urljoin(base, path)
+        
+    @property
     def hash(self):
+        """A tuple (hash_method,hash_hex) if the prefix is "ni", otherwise None.
+        """
         ni = self.ni
         if ni is None:
             return None

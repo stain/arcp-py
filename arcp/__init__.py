@@ -44,8 +44,7 @@ for instance using ``urljoin`` to resolve relative references::
 
 
 In addition this module provides functions that can be used
-instead of ``urllib.parse.urlparse`` to parse
-arcp URIs::
+to parse arcp URIs into its constituent fields::
 
     >>> is_arcp_uri("arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/file.txt")
     True
@@ -68,6 +67,28 @@ arcp URIs::
 
     >>> parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/folder/").hash
     ('sha-256', '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069')
+
+The object returned from ``parse_arcp`` is similar to 
+``ParseResult`` from ``urlparse``, but contains additional properties 
+``prefix``, ``uuid``, ``ni``, ``hash`` and ``name``, 
+some of which will be ``None`` depending on the arcp prefix.
+
+The function ``arcp.parse.urlparse`` can be imported as an alternative 
+to ``urllib.parse.urlparse``. If the scheme is ``arcp`` then the extra 
+arcp fields like `prefix`, `uuid`, `hash` and `name` are available
+as from `parse_arcp`, otherwise the output is the same as from 
+regular `urlparse`::
+
+    >>> from arcp.parse import urlparse
+    >>> urlparse("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/folder/soup;sads")
+    ARCPParseResult(scheme='arcp',prefix='ni',
+       name='sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk',
+       ni='sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk',
+       hash=('sha-256', '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
+       path='/folder/soup;sads',query='',fragment='')
+    >>> urlparse("http://example.com/help?q=a")
+    ParseResult(scheme='http', netloc='example.com', path='/help', params='', 
+      query='q=a', fragment='')
 
 
 .. _arcp: https://tools.ietf.org/html/draft-soilandreyes-arcp-02
