@@ -35,8 +35,8 @@ files packaged in an archive like a ZIP file::
     >>> arcp_location("http://example.com/data.zip", "/file.txt")
     'arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/file.txt'
 
-arcp URLs can be used with ``urllib.parse``, 
-for instance using ``urljoin`` to resolve relative references::
+arcp URLs can be used with :mod:`urllib.parse`, 
+for instance using :func:`urllib.parse.urljoin` to resolve relative references::
 
     >>> css = arcp.arcp_name("app.example.com", "css/style.css")
     >>> urllib.parse.urljoin(css, "../fonts/foo.woff")
@@ -68,16 +68,16 @@ to parse arcp URIs into its constituent fields::
     >>> parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/folder/").hash
     ('sha-256', '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069')
 
-The object returned from ``parse_arcp`` is similar to 
-``ParseResult`` from ``urlparse``, but contains additional properties 
-``prefix``, ``uuid``, ``ni``, ``hash`` and ``name``, 
+The object returned from :func:`parse_arcp()` is similar to 
+:class:`urllib.parse.ParseResult`, but contains additional properties 
+:attr:`prefix`, :attr:`uuid`, :attr:`ni`, :attr:`hash` and :attr:`name`, 
 some of which will be ``None`` depending on the arcp prefix.
 
-The function ``arcp.parse.urlparse`` can be imported as an alternative 
-to ``urllib.parse.urlparse``. If the scheme is ``arcp`` then the extra 
-arcp fields like `prefix`, `uuid`, `hash` and `name` are available
-as from `parse_arcp`, otherwise the output is the same as from 
-regular `urlparse`::
+The function :func:`arcp.parse.urlparse()` can be imported as an alternative 
+to :func:`urllib.parse.urlparse`. If the scheme is ``arcp`` then the extra 
+arcp fields like :attr:`prefix`, :attr:`uuid`, :attr:`hash` and :attr:`name` are available
+as from :func:`parse_arcp`, otherwise the output is the same as from 
+:func:`urllib.parse.urlparse`::
 
     >>> from arcp.parse import urlparse
     >>> urlparse("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/folder/soup;sads")
@@ -94,10 +94,14 @@ regular `urlparse`::
 .. _arcp: https://tools.ietf.org/html/draft-soilandreyes-arcp-02
 """
 
+__author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"
+__copyright__   = "Copyright 2018 The University of Manchester"
+__license__     = "Apache License, version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>"
+
 SCHEME="arcp"
 def _register_scheme(scheme=SCHEME):
     import urllib.parse as urlp
-    """Ensure app scheme works with urllib.parse.urljoin and friends"""    
+    """Ensure app scheme works with :func:`urllib.parse.urljoin` and friends"""    
     for u in (urlp.uses_relative, urlp.uses_netloc, urlp.uses_fragment):
         if not scheme in u:
             u.append(scheme)

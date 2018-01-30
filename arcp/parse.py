@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 ## Copyright 2018 Stian Soiland-Reyes, The University of Manchester, UK
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +25,9 @@ urllib.parse.urlparse() - supporting any URIs. If the URI is
 using the arcp: URI scheme, additional components are available
 as from parse_arcp().
 """
+__author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"
+__copyright__   = "Copyright 2018 The University of Manchester"
+__license__     = "Apache License, version 2.0 (https://www.apache.org/licenses/LICENSE-2.0)"
 
 from uuid import UUID, NAMESPACE_URL
 import urllib.parse as urlp
@@ -46,7 +48,7 @@ def parse_arcp(uri):
 
     The returned object is similar to ``urllib.parse.urlparse()``
     in that it is a tuple of 
-    (scheme,netloc,path,params,query,fragment)
+    ``(scheme,netloc,path,params,query,fragment)``
     with equally named properties, but it also adds
     properties for arcp fields:
     
@@ -62,12 +64,13 @@ def parse_arcp(uri):
 def urlparse(uri):
     """Parse any URI string into constituent parts.
 
-    The returned object is similar to ``urllib.parse.urlparse()``
+    The returned object is similar to 
+    :func:`urllib.parse.urlparse()`
     in that it is a tuple of 
-    (scheme,netloc,path,params,query,fragment)
+    ``(scheme,netloc,path,params,query,fragment)``
     with equally named properties, but if the 
     URI scheme is "arcp" this also adds
-    arcp properties as in ``parse_arcp()``.
+    arcp properties as in :func:`parse_arcp()`.
     """
     u = urlp.urlparse(uri)    
     if (u.scheme == SCHEME):
@@ -81,8 +84,8 @@ class ARCPParseResult(urlp.ParseResult):
     This class does not detect if the arcp URI was valid
     according to the specification.
 
-    This class extends urlllib.parse.ParseResult
-    adding arcp properties, which may be None.
+    This class extends :class:`urlllib.parse.ParseResult`
+    adding arcp properties, some of which may be `None`.
     """
     __slots__ = ()
 
@@ -162,7 +165,7 @@ class ARCPParseResult(urlp.ParseResult):
         """The ni .well_known URI if the prefix is "ni", otherwise None.
 
         The parameter base should be an absolute URI like 
-        "http://example.com/"
+        ``"http://example.com/"``
         """
         ni = self.ni
         if ni is None:

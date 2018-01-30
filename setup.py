@@ -14,6 +14,10 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
+__author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"
+__copyright__   = "Copyright 2018 The University of Manchester"
+__license__     = "Apache License, version 2.0 (https://www.apache.org/licenses/LICENSE-2.0)"
+
 from setuptools import setup, find_packages
 from codecs import open
 from os import path

@@ -34,7 +34,6 @@ If you want to install manually from this code base, then try::
 
     python setup.py install
 
-You may want to use [venv](https://docs.python.org/3/library/venv.html) although this library does not currently have any external dependencies.
 
 
 Usage

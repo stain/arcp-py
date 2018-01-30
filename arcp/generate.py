@@ -17,25 +17,31 @@
 """
 Generate arcp URIs with various prefixes.
 
-As detailed in draft-soilandreyes-arcp, the choice of 
-arcp prefix depends on the uniqueness constraints required
+As detailed in draft-soilandreyes-arcp_, the choice of 
+arcp _prefix_ depends on the uniqueness constraints required
 to identify the archive.
 
-arcp_random() can be used for a fresh arcp URI based on a 
-pseudo-random generator. Use urllib.parse.urljoin() to 
+:func:`arcp_random()` can be used for a fresh arcp URI 
+based on a pseudo-random generator. Use 
+:func:`urllib.parse.urljoin()` to 
 resolve paths within the same archive.
 
-arcp_uuid() can be used with a pre-made UUID instance,
+:func:`arcp_uuid()` can be used with a pre-made UUID instance,
 for instance loaded from an archive's manifest
-or generated with uuid.uuid4()
+or generated with :func:`uuid.uuid4()`
 
-arcp_location() can be used to identify an archive based on
+:func:`arcp_location()` can be used to identify an archive based on
 its location URL, facilitating a UUID v5 authority.
 
-arcp_name() can be used to identify an archive based on its
+:func:`arcp_name()` can be used to identify an archive based on its
 absolute DNS name or package name within an installation.
+
+.. _draft-soilandreyes-arcp: https://www.ietf.org/id/draft-soilandreyes-arcp
 """
 
+__author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"
+__copyright__   = "Copyright 2018 The University of Manchester"
+__license__     = "Apache License, version 2.0 (https://www.apache.org/licenses/LICENSE-2.0)"
 
 from uuid import uuid4, uuid5, UUID, NAMESPACE_URL
 from urllib.parse import urlunsplit
@@ -46,7 +52,9 @@ from base64 import urlsafe_b64encode, urlsafe_b64decode
 SCHEME="arcp"
 
 def _reg_name_regex():
-    """Compile regular expression for RFC3986 reg-name production
+    """Compile regular expression for RFC3986_ reg-name production
+
+    _RFC3986: https://www.ietf.org/rfc/rfc3986
     """
     # unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
     unreserved = r"[A-Za-z0-9-._~]"
@@ -67,10 +75,10 @@ def arcp_uuid(uuid, path="/", query=None, fragment=None):
     """Generate an arcp URI for the given uuid.
 
     Parameters:
-      uuid: a uuid string or UUID instance identifying the archive, e.g. 58ca7fa6-be2f-48e4-8b69-e63fb0d929fe
-      path: Optional path within archive.
-      query: Optional query component.
-      fragment: Optional fragment component.
+      - uuid -- a uuid string or UUID instance identifying the archive, e.g. ``58ca7fa6-be2f-48e4-8b69-e63fb0d929fe``
+      - path -- Optional path within archive.
+      - query -- Optional query component.
+      - fragment -- Optional fragment component.
     """
     if not isinstance(uuid, UUID):
         # ensure valid UUID
@@ -83,13 +91,13 @@ def arcp_uuid(uuid, path="/", query=None, fragment=None):
     return urlunsplit(s)
 
 def arcp_random(path="/", query=None, fragment=None, uuid=None):
-    """Generate an arcp URI for using a random uuid.
+    """Generate an arcp URI using a random uuid.
 
     Parameters:
-      path: Optional path within archive.
-      query: Optional query component.
-      fragment: Optional fragment component.
-      uuid: optional UUID v4 string or UUID instance
+      - path -- Optional path within archive.
+      - query -- Optional query component.
+      - fragment -- Optional fragment component.
+      - uuid -- optional UUID v4 string or UUID instance
     """
     if uuid is None:
         uuid = uuid4()
@@ -104,11 +112,11 @@ def arcp_location(location, path="/", query=None, fragment=None, namespace=NAMES
     """Generate an arcp URI for a given archive location.
 
     Parameters:
-      location: URL or location of archive, e.g. "http://example.com/data.zip"
-      path: Optional path within archive.
-      query: Optional query component.
-      fragment: Optional fragment component.
-      namespace: optional namespace UUID for non-URL location.
+      - location: URL or location of archive, e.g. ``http://example.com/data.zip``
+      - path -- Optional path within archive.
+      - query -- Optional query component.
+      - fragment -- Optional fragment component.
+      - namespace -- optional namespace UUID for non-URL location.
     """    
     # TODO: Ensure location is valid url?
     uuid = uuid5(namespace, location)
@@ -118,11 +126,11 @@ def arcp_name(name, path="/", query=None, fragment=None):
     """Generate an arcp URI for a given archive name.
 
     Parameters:
-      name: Absolute DNS or package name, e.g. "app.example.com"
-      path: Optional path within archive.
-      query: Optional query component.
-      fragment: Optional fragment component.
-      namespace: optional namespace UUID for non-URL location.
+      - name -- Absolute DNS or package name, e.g. ``app.example.com``
+      - path -- Optional path within archive.
+      - query -- Optional query component.
+      - fragment -- Optional fragment component.
+      - namespace -- optional namespace UUID for non-URL location.
     """
     if not _REG_NAME.fullmatch(name):
         raise Exception("Invalid name: %s" % name)
@@ -134,14 +142,15 @@ def arcp_hash(bytes=b"", path="/", query=None, fragment=None, hash=None):
     """Generate an arcp URI for a given archive hash checksum.
 
     Parameters:
-      bytes: Optional bytes of archive to checksum
-      path: Optional path within archive.
-      query: Optional query component.
-      fragment: Optional fragment component.
-      hash: Optional hash instance from ``hashlib.sha256()``
+      - bytes -- Optional bytes of archive to checksum
+      - path -- Optional path within archive.
+      - query -- Optional query component.
+      - fragment -- Optional fragment component.
+      - hash -- Optional hash instance from :func:`hashlib.sha256()`
     
-    Either bytes or hash must be provided. The hash parameter can be 
-    provided to avoid representing the whole archive bytes in memory.
+    Either ``bytes`` or ``hash`` must be provided. 
+    The ``hash`` parameter can be provided to avoid representing 
+    the whole archive bytes in memory.
     """
     if hash is None:
         hash = sha256()
