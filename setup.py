@@ -20,14 +20,14 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
   long_description = f.read()
 
 
 setup(
   name = 'arcp',
   packages = find_packages(exclude=['contrib', 'docs', 'tests']), # Required
-  version = '0.1.0.dev1',
+  version = '0.1.0.dev2',
   description = 'arcp (Archive and Package) URI parser and generator',
   long_description=long_description,
   author = 'Stian Soiland-Reyes',
