@@ -21,6 +21,21 @@ or an issue at <https://github.com/stain/arcp-py/issues>.
 
 Submitted contributions are assumed to be covered by section 5 of the Apache License 2.0.
 
+Installing
+----------
+
+You will need Python 3.4 or later (tested with 3.6).
+
+If you have [pip](https://docs.python.org/3/installing/), then the easiest is normally::
+
+    pip install arcp
+
+If you want to install manually from this repository, then try::
+
+    python setup.py install
+
+You may want to use [venv](https://docs.python.org/3/library/venv.html) although this library does not currently have any external dependencies.
+
 
 Usage
 ------
