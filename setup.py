@@ -27,7 +27,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
   name = 'arcp',
   packages = find_packages(exclude=['contrib', 'docs', 'tests']), # Required
-  version = '0.1.0.dev0',
+  version = '0.1.0.dev1',
   description = 'arcp (Archive and Package) URI parser and generator',
   long_description=long_description,
   author = 'Stian Soiland-Reyes',
@@ -48,11 +48,12 @@ setup(
     'Topic :: Software Development :: Build Tools',
      # 'License :: OSI Approved :: Apache Software License',
      # https://github.com/pypa/pypi-legacy/issues/564
-    'License :: OSI Approved :: Apache License, Version 2.0 (Apache-2.0)',  
+    #'License :: OSI Approved',
+    # 'License :: OSI Approved :: Apache License, Version 2.0 (Apache-2.0)',  
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.6',
     'Topic :: Internet',
-    'Topic :: Internet :: WWW/HTTP'
+    'Topic :: Internet :: WWW/HTTP',
     'Topic :: System :: Archiving',
     'Topic :: System :: Archiving :: Packaging',
 ],
