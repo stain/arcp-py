@@ -31,7 +31,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
   name = 'arcp',
   packages = find_packages(exclude=['contrib', 'docs', 'tests']), # Required
-  version = '0.1.0.dev2',
+  version = '0.1.0',
   description = 'arcp (Archive and Package) URI parser and generator',
   long_description=long_description,
   author = 'Stian Soiland-Reyes',
@@ -39,7 +39,7 @@ setup(
   
   # https://www.apache.org/licenses/LICENSE-2.0
   license = "Apache License, Version 2.0",
-  url = 'https://github.com/stain/arcp-py', 
+  url = 'http://arcp.readthedocs.io/',
   download_url = 'https://github.com/stain/arcp-py/archive/0.1.0.tar.gz',
   keywords = "arcp uri url iri archive package",
   
