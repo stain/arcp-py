@@ -6,7 +6,9 @@ Create/parse arcp_ (Archive and Package) URIs.
 .. image:: https://readthedocs.org/projects/arcp/badge/?version=latest
   :target: http://arcp.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
-
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1162749.svg
+  :target: https://doi.org/10.5281/zenodo.1162749
+   
 License
 -------
 
