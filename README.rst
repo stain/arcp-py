@@ -26,11 +26,11 @@ Installing
 
 You will need Python 3.4 or later (tested with 3.6).
 
-If you have [pip](https://docs.python.org/3/installing/), then the easiest is normally::
+If you have pip_, then the easiest is normally::
 
     pip install arcp
 
-If you want to install manually from this repository, then try::
+If you want to install manually from this code base, then try::
 
     python setup.py install
 
@@ -116,5 +116,5 @@ regular `urlparse`:: python
 
 
 .. _arcp: https://tools.ietf.org/html/draft-soilandreyes-arcp-02
-
+.. _pip: https://docs.python.org/3/installing/
 
