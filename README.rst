@@ -7,20 +7,19 @@ Create/parse arcp_ (Archive and Package) URIs.
 License
 -------
 
-* (c) 2018 Stian Soiland-Reyes <https://orcid.org/0000-0001-9842-9718>, The University of Manchester, UK
+* © 2018 Stian Soiland-Reyes <https://orcid.org/0000-0001-9842-9718>, The University of Manchester, UK
 
-Licensed under the
-`Apache License 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`, 
+Licensed under the 
+Apache License, version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>, 
 see the file LICENSE.txt for details.
 
 Contribute
 ----------
 
-Feel free to raise a `pull request <https://github.com/stain/arcp-py/pulls>`
-or an `issue <https://github.com/stain/arcp-py/issues>`.
+Feel free to raise a pull request at <https://github.com/stain/arcp-py/pulls>
+or an issue at <https://github.com/stain/arcp-py/issues>.
 
-Submitted contributions are assumed to be
-covered by the `Apache License section 5 <https://www.apache.org/licenses/LICENSE-2.0#contributions>`.
+Submitted contributions are assumed to be covered by section 5 of the Apache License 2.0.
 
 
 Usage
