@@ -7,7 +7,7 @@ Create/parse arcp_ (Archive and Package) URIs.
 License
 -------
 
-* © 2018 Stian Soiland-Reyes <https://orcid.org/0000-0001-9842-9718>, The University of Manchester, UK
+© 2018 Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>, The University of Manchester, UK
 
 Licensed under the 
 Apache License, version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>, 
@@ -42,7 +42,7 @@ Usage
 
 This module provides functions for creating arcp_ URIs, 
 which can be used for identifying or parsing hypermedia 
-files packaged in an archive or package, like a ZIP file::
+files packaged in an archive or package, like a ZIP file:: python
 
     >>> from arcp import *
 
@@ -67,7 +67,7 @@ for instance using ``urljoin`` to resolve relative references::
 
 
 In addition this module provides functions that can be used
-to parse arcp URIs into its constituent fields::
+to parse arcp URIs into its constituent fields:: python
 
     >>> is_arcp_uri("arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/file.txt")
     True
@@ -100,7 +100,7 @@ The function ``arcp.parse.urlparse`` can be imported as an alternative
 to ``urllib.parse.urlparse``. If the scheme is ``arcp`` then the extra 
 arcp fields like `prefix`, `uuid`, `hash` and `name` are available
 as from `parse_arcp`, otherwise the output is the same as from 
-regular `urlparse`::
+regular `urlparse`:: python
 
     >>> from arcp.parse import urlparse
     >>> urlparse("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/folder/soup;sads")
