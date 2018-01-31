@@ -117,10 +117,10 @@ def arcp_location(location, path="/", query=None, fragment=None, namespace=NAMES
       - query -- Optional query component.
       - fragment -- Optional fragment component.
       - namespace -- optional namespace UUID for non-URL location.
-    """    
-    # TODO: Ensure location is valid url?
+    """
+    # TODO: Ensure location is valid url if NAMESPACE_URL?
     uuid = uuid5(namespace, location)
-    return arcp_uuid(uuid, path=path, fragment=fragment)
+    return arcp_uuid(uuid, path=path, query=query, fragment=fragment)
     
 def arcp_name(name, path="/", query=None, fragment=None):
     """Generate an arcp URI for a given archive name.
