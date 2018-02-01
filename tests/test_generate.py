@@ -19,7 +19,7 @@ from uuid import UUID, RFC_4122, NAMESPACE_OID
 import re
 
 from arcp import generate
-from hashlib import sha256, sha3_256
+from hashlib import sha256, md5
 
 # Some test data
 TEST_UUID_v1 = UUID("dbc0802a-0682-11e8-9895-b8ca3ad10ac0")
@@ -264,6 +264,6 @@ class HashTest(unittest.TestCase):
             generate.arcp_hash(path="bin/evil", hash=h))
 
     def testHashWrongHash(self):
-        h = sha3_256(BYTES)
+        h = md5(BYTES)
         with self.assertRaises(Exception):
             generate.arcp_hash(hash=h)
