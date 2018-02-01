@@ -33,7 +33,7 @@ Submitted contributions are assumed to be covered by section 5 of the Apache Lic
 Installing
 ----------
 
-You will need Python 3.4 or later (tested with 3.6).
+You will need Python 2.7, Python 3.4 or later (tested with 3.6).
 
 If you have pip_, then the easiest is normally to install from <https://pypi.org/project/arcp/> using::
 
