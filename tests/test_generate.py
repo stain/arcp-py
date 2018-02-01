@@ -197,10 +197,23 @@ class NameTest(unittest.TestCase):
         template = "arcp://name,messaging.example.com/share;{*uri};{*redirect}"
         u = template.replace("{*uri}", photo).replace("{*redirect}", new_photos)
 
+        # TODO: Should arcp_name support 
         path =  "/share;%s;%s" % (photo, new_photos)
         self.assertEqual(u, 
             generate.arcp_name("messaging.example.com", path))
 
+    def testNamePath(self):
+        self.assertEqual("arcp://name,app.example.org/msgs/1",
+            generate.arcp_name("app.example.org", "/msgs/1"))
 
+    def testNameQuery(self):
+        self.assertEqual("arcp://name,app.example.org/?q=a",
+            generate.arcp_name("app.example.org", query="q=a"))
 
+    def testNameHash(self):
+        self.assertEqual("arcp://name,app.example.org/#hash",
+            generate.arcp_name("app.example.org", fragment="hash"))
 
+    def testNamePathQueryHash(self):
+        self.assertEqual("arcp://name,app.example.org/msgs/1?a=b&c=d#hash",
+            generate.arcp_name("app.example.org", "/msgs/1", "a=b&c=d", "hash"))

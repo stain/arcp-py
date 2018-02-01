@@ -102,7 +102,8 @@ SCHEME="arcp"
 def _register_scheme(scheme=SCHEME):
     import urllib.parse as urlp
     """Ensure app scheme works with :func:`urllib.parse.urljoin` and friends"""    
-    for u in (urlp.uses_relative, urlp.uses_netloc, urlp.uses_fragment):
+    for u in (urlp.uses_relative, urlp.uses_netloc, 
+              urlp.uses_params, urlp.uses_fragment):
         if not scheme in u:
             u.append(scheme)
 _register_scheme()
