@@ -37,10 +37,10 @@ archive), or for externally identiyfing sub-resources referenced by
 hypermedia formats.
 
 Examples:
- - `arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html`
- - `arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/`
- - `arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/`
- - `arcp://name,gallery.example.org/`
+ - ``arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html``
+ - ``arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/``
+ - ``arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/``
+ - ``arcp://name,gallery.example.org/``
 
 The different forms of URI authority_ in arcp URIs can be used depending
 on which uniqueness constraints to apply when addressing an archive.
