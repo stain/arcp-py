@@ -79,11 +79,22 @@ class TestParse(unittest.TestCase):
         self.assertEqual("", t.query)
         self.assertEqual("", t.fragment)
 
-    def parseFails(self):
+    def test_parse_empty_authority(self):
+        t = parse.parse_arcp("arcp:///")
+        self._test_tuple(t)
+        self.assertEqual("arcp", t.scheme)
+        self.assertEqual("", t.netloc)
+        self.assertEqual("/", t.path)
+        self.assertEqual("", t.params)
+        self.assertEqual("", t.query)
+        self.assertEqual("", t.fragment)
+
+
+    def test_parseFails(self):
         with self.assertRaises(Exception):
             parse.parse_arcp("http://example.com/")
 
-    def parse_prefix(self):
+    def test_parse_prefix(self):
         self.assertEqual("uuid",
              parse.parse_arcp("arcp://uuid,ecba06ed-472e-46d4-8ab8-9570e40e0b8c/").prefix)
         self.assertEqual("ni",
@@ -101,3 +112,33 @@ class TestParse(unittest.TestCase):
         self.assertEqual("x-unknown",
              parse.parse_arcp("arcp://x-unknown,abc").prefix)
 
+    def test_parse_name(self):
+        self.assertEqual("example.com",
+             parse.parse_arcp("arcp://name,example.com/").name)
+        # but other "names" are also supported:
+        self.assertEqual("ecba06ed-472e-46d4-8ab8-9570e40e0b8c",
+             parse.parse_arcp("arcp://uuid,ecba06ed-472e-46d4-8ab8-9570e40e0b8c/").name)
+        self.assertEqual("sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk",
+             parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/").name)
+        # authority fall-back
+        self.assertEqual("example.com",
+             parse.parse_arcp("arcp://example.com/").name)
+        # unlikely, but valid by specification
+        self.assertEqual("",
+             parse.parse_arcp("arcp:///").name)
+        # name from an unknown prefix
+        self.assertEqual("abc",
+             parse.parse_arcp("arcp://x-unknown,abc").name)
+
+
+    def test_parse_uuid(self):
+        self.assertEqual("ecba06ed472e46d48ab89570e40e0b8c",
+             parse.parse_arcp("arcp://uuid,ecba06ed-472e-46d4-8ab8-9570e40e0b8c/").uuid.hex)
+        self.assertIsNone(
+            parse.parse_arcp("arcp://name,ecba06ed-472e-46d4-8ab8-9570e40e0b8c/").uuid)
+        self.assertIsNone(
+            parse.parse_arcp("arcp://ecba06ed-472e-46d4-8ab8-9570e40e0b8c/").uuid)
+        
+    def test_parse_uuid_fails(self):
+        with self.assertRaises(Exception):
+            parse.parse_arcp("arcp://uuid,ecba06ed-WRONG/").uuid

@@ -98,14 +98,12 @@ class ARCPParseResult(urlp.ParseResult):
         if self.scheme != SCHEME:
             raise Exception("uri has scheme %s, expected %s" % 
                             (self.scheme, SCHEME))
-        if not self.netloc:
-            raise Exception("uri has empty authority")
 
     def _host_split(self):
         """Return (prefix,name) if authority has "," - 
         otherwise (None, authority).
         """
-        if "," in self.netloc:
+        if self.netloc and "," in self.netloc:
             return self.netloc.split(",", 1)
         else:
             return (None, self.netloc)
