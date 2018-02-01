@@ -8,6 +8,8 @@ Create/parse arcp_ (Archive and Package) URIs.
   :alt: Documentation Status
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1162749.svg
   :target: https://doi.org/10.5281/zenodo.1162749
+.. image:: https://travis-ci.org/stain/arcp-py.svg?branch=master
+    :target: https://travis-ci.org/stain/arcp-py
    
 License
 -------
