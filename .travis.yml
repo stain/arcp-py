@@ -8,7 +8,6 @@ python:
   - "3.6"
   - "3.7-dev"  # 3.7 development branch
   - "pypy3"
-install:
-  - python setup.py install
 script:
-  - python setup.py test
+  - pytest
+  - sphinx-build docs docs/_build/
