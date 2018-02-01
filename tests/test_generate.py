@@ -144,7 +144,6 @@ class RandomTest(unittest.TestCase):
             generate.arcp_random(uuid="")      
 
 
-
 class LocationTest(unittest.TestCase):
     """Test arcp_location()"""
     def testExampleZip(self):
@@ -179,4 +178,29 @@ class LocationTest(unittest.TestCase):
         self.assertEqual("arcp://uuid,215aa48f-233f-507f-8484-3eb5d6e23e9d/folder/file.txt?q=s#hash",
             generate.arcp_location(OID, "/folder/file.txt", "q=s", "hash", 
                 namespace=NAMESPACE_OID))
+
+
+class NameTest(unittest.TestCase):
+    """Test arcp_name()"""
+    def testExampleName(self):
+        # Adapted from 
+        # https://tools.ietf.org/id/draft-soilandreyes-arcp-02.html#rfc.appendix.A.7
+        self.assertEqual("arcp://name,gallery.example.org/",
+            generate.arcp_name("gallery.example.org"))
+        new_photos = generate.arcp_name("gallery.example.org", "/photos/", "New")
+        
+        self.assertEqual("arcp://name,gallery.example.org/photos/?New",
+            new_photos)
+        photo = generate.arcp_name("gallery.example.org", "/photos/137")
+        self.assertEqual("arcp://name,gallery.example.org/photos/137", photo)
+
+        template = "arcp://name,messaging.example.com/share;{*uri};{*redirect}"
+        u = template.replace("{*uri}", photo).replace("{*redirect}", new_photos)
+
+        path =  "/share;%s;%s" % (photo, new_photos)
+        self.assertEqual(u, 
+            generate.arcp_name("messaging.example.com", path))
+
+
+
 
