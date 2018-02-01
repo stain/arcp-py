@@ -100,7 +100,11 @@ __license__     = "Apache License, version 2.0 <https://www.apache.org/licenses/
 
 SCHEME="arcp"
 def _register_scheme(scheme=SCHEME):
-    import urllib.parse as urlp
+    try:
+        import urllib.parse as urlp
+    except:
+        import urlparse as urlp
+
     """Ensure app scheme works with :func:`urllib.parse.urljoin` and friends"""    
     for u in (urlp.uses_relative, urlp.uses_netloc, 
               urlp.uses_params, urlp.uses_fragment):

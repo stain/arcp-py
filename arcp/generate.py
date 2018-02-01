@@ -44,7 +44,12 @@ __copyright__   = "Copyright 2018 The University of Manchester"
 __license__     = "Apache License, version 2.0 (https://www.apache.org/licenses/LICENSE-2.0)"
 
 from uuid import uuid4, uuid5, UUID, NAMESPACE_URL
-from urllib.parse import urlunsplit
+
+try:
+    from urllib.parse import urlunsplit
+except:
+    from urlparse import urlunsplit
+
 import re
 from hashlib import sha256
 from base64 import urlsafe_b64encode, urlsafe_b64decode
@@ -132,7 +137,7 @@ def arcp_name(name, path="/", query=None, fragment=None):
       - fragment -- Optional fragment component.
       - namespace -- optional namespace UUID for non-URL location.
     """
-    if not _REG_NAME.fullmatch(name):
+    if not _REG_NAME.match(name):
         raise Exception("Invalid name: %s" % name)
     authority = "name," + name
     s = (SCHEME, authority, path, query, fragment)

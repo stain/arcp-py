@@ -30,7 +30,12 @@ __copyright__   = "Copyright 2018 The University of Manchester"
 __license__     = "Apache License, version 2.0 (https://www.apache.org/licenses/LICENSE-2.0)"
 
 from uuid import UUID, NAMESPACE_URL
-import urllib.parse as urlp
+
+try:
+    import urllib.parse as urlp
+except:
+    import urlparse as urlp
+
 from base64 import urlsafe_b64decode
 from binascii import hexlify
 
