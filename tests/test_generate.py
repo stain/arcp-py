@@ -19,6 +19,7 @@ from uuid import UUID, RFC_4122, NAMESPACE_OID
 import re
 
 from arcp import generate
+from hashlib import sha256, sha3_256
 
 # Some test data
 TEST_UUID_v1 = UUID("dbc0802a-0682-11e8-9895-b8ca3ad10ac0")
@@ -43,14 +44,14 @@ class UUIDTest(unittest.TestCase):
         self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/folder/file.txt?q=s",
             generate.arcp_uuid(TEST_UUID_v1, "/folder/file.txt", "q=s"))
     def testUUIDPathQueryFrag(self):
-        self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/folder/file.txt?q=s#hash",
-            generate.arcp_uuid(TEST_UUID_v1, "/folder/file.txt", "q=s", "hash"))
+        self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/folder/file.txt?q=s#frag",
+            generate.arcp_uuid(TEST_UUID_v1, "/folder/file.txt", "q=s", "frag"))
     def testUUIDQuery(self):
         self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/?a=b&c=d",
             generate.arcp_uuid(TEST_UUID_v1, query="a=b&c=d"))
     def testUUIDFrag(self):
-        self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/#hash",
-            generate.arcp_uuid(TEST_UUID_v1, fragment="hash"))
+        self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/#frag",
+            generate.arcp_uuid(TEST_UUID_v1, fragment="frag"))
     def testUUIDstr(self):
         self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/",
             generate.arcp_uuid("dbc0802a-0682-11e8-9895-b8ca3ad10ac0"))
@@ -58,9 +59,9 @@ class UUIDTest(unittest.TestCase):
         self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/",
             generate.arcp_uuid("dbc0802a-0682-11e8-9895-b8ca3ad10ac0"))    
     def testUUIDstrPathQueryFrag(self):
-        self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/folder/file.txt?q=s#hash",
+        self.assertEqual("arcp://uuid,dbc0802a-0682-11e8-9895-b8ca3ad10ac0/folder/file.txt?q=s#frag",
             generate.arcp_uuid("dbc0802a-0682-11e8-9895-b8ca3ad10ac0", 
-                               "/folder/file.txt", "q=s", "hash"))
+                               "/folder/file.txt", "q=s", "frag"))
     def testUUIDstrInvalidUUID(self):
         with self.assertRaises(Exception):
             # Too short
@@ -106,13 +107,13 @@ class RandomTest(unittest.TestCase):
         self.assertTrue(u.startswith("arcp://uuid,"))
         self.assertTrue(u.endswith("/?q=a"))
     def testRandomFrag(self):
-        u = generate.arcp_random(fragment="hash")
+        u = generate.arcp_random(fragment="frag")
         self.assertTrue(u.startswith("arcp://uuid,"))
-        self.assertTrue(u.endswith("/#hash"))
+        self.assertTrue(u.endswith("/#frag"))
     def testRandomPathQueryFrag(self):
-        u = generate.arcp_random("/folder/file.txt", "a=b&c=d", "hash")
+        u = generate.arcp_random("/folder/file.txt", "a=b&c=d", "frag")
         self.assertTrue(u.startswith("arcp://uuid,"))
-        self.assertTrue(u.endswith("/folder/file.txt?a=b&c=d#hash"))
+        self.assertTrue(u.endswith("/folder/file.txt?a=b&c=d#frag"))
 
     # Now test providing a fixed UUID        
     def testUUID(self):
@@ -132,8 +133,8 @@ class RandomTest(unittest.TestCase):
             generate.arcp_random(uuid="dbc0802a-0682-11e8-9895-b8ca3ad10ac0")
             
     def testUUIDstrPathQueryFrag(self):
-        self.assertEqual("arcp://uuid,8c36d39a-18be-4aa8-b1ce-fef330b00a28/folder/file.txt?q=s#hash",
-            generate.arcp_random("/folder/file.txt", "q=s", "hash", 
+        self.assertEqual("arcp://uuid,8c36d39a-18be-4aa8-b1ce-fef330b00a28/folder/file.txt?q=s#frag",
+            generate.arcp_random("/folder/file.txt", "q=s", "frag", 
                 uuid="8c36d39a-18be-4aa8-b1ce-fef330b00a28"))
     def testUUIDstrInvalidUUID(self):
         with self.assertRaises(Exception):
@@ -175,8 +176,8 @@ class LocationTest(unittest.TestCase):
         self.assertEqual("arcp://uuid,215aa48f-233f-507f-8484-3eb5d6e23e9d/example", u)
 
     def testLocationNamespaceUUIDstrPathQueryFrag(self):
-        self.assertEqual("arcp://uuid,215aa48f-233f-507f-8484-3eb5d6e23e9d/folder/file.txt?q=s#hash",
-            generate.arcp_location(OID, "/folder/file.txt", "q=s", "hash", 
+        self.assertEqual("arcp://uuid,215aa48f-233f-507f-8484-3eb5d6e23e9d/folder/file.txt?q=s#frag",
+            generate.arcp_location(OID, "/folder/file.txt", "q=s", "frag", 
                 namespace=NAMESPACE_OID))
 
 
@@ -211,9 +212,58 @@ class NameTest(unittest.TestCase):
             generate.arcp_name("app.example.org", query="q=a"))
 
     def testNameHash(self):
-        self.assertEqual("arcp://name,app.example.org/#hash",
-            generate.arcp_name("app.example.org", fragment="hash"))
+        self.assertEqual("arcp://name,app.example.org/#frag",
+            generate.arcp_name("app.example.org", fragment="frag"))
 
     def testNamePathQueryHash(self):
-        self.assertEqual("arcp://name,app.example.org/msgs/1?a=b&c=d#hash",
-            generate.arcp_name("app.example.org", "/msgs/1", "a=b&c=d", "hash"))
+        self.assertEqual("arcp://name,app.example.org/msgs/1?a=b&c=d#frag",
+            generate.arcp_name("app.example.org", "/msgs/1", "a=b&c=d", "frag"))
+
+# Example from https://tools.ietf.org/html/rfc6920#section-8.1
+BYTES = "Hello World!".encode("ASCII")
+# echo -n "Hello World!" | sha256sum
+HASH = "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"
+NI = "ni:///sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk"
+ARCP = "arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/"
+
+class HashTest(unittest.TestCase):
+    """Test arcp_hash()"""
+    def testHash(self):
+        # Using "Hello World!" example
+        # instead of a real archive file
+        self.assertEqual(ARCP, generate.arcp_hash(BYTES))
+        
+    def testHashPath(self):
+        self.assertEqual(ARCP + "bin/evil", 
+            generate.arcp_hash(BYTES, "/bin/evil"))
+
+    def testHashQuery(self):
+        self.assertEqual(ARCP + "?q=a", 
+            generate.arcp_hash(BYTES, query="q=a"))
+    
+    def testHashFragment(self):
+        self.assertEqual(ARCP + "#frag", 
+            generate.arcp_hash(BYTES, fragment="frag"))
+
+    def testHashPathQueryFragment(self):
+        self.assertEqual(ARCP + "bin/evil?a=b&c=d#frag", 
+            generate.arcp_hash(BYTES, "/bin/evil", "a=b&c=d", "frag"))
+
+    def testHashHash(self):
+        h = sha256(BYTES)
+        self.assertEqual(ARCP, generate.arcp_hash(hash=h))
+
+    def testHashPathEmptyHash(self):
+        h = sha256()
+        self.assertEqual(ARCP + "bin/evil",
+            generate.arcp_hash(BYTES, "bin/evil", hash=h))
+
+    def testHashPathPremadeHash(self):
+        h = sha256(BYTES)
+        self.assertEqual(ARCP + "bin/evil",
+            generate.arcp_hash(path="bin/evil", hash=h))
+
+    def testHashWrongHash(self):
+        h = sha3_256(BYTES)
+        with self.assertRaises(Exception):
+            generate.arcp_hash(hash=h)
