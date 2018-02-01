@@ -9,8 +9,10 @@ Create/parse arcp_ (Archive and Package) URIs.
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1162749.svg
   :target: https://doi.org/10.5281/zenodo.1162749
 .. image:: https://travis-ci.org/stain/arcp-py.svg?branch=master
-    :target: https://travis-ci.org/stain/arcp-py
-   
+  :target: https://travis-ci.org/stain/arcp-py
+.. image:: https://img.shields.io/pypi/v/arcp.svg?maxAge=86400
+  :target: https://pypi.org/project/arcp/
+
 License
 -------
 
