@@ -37,18 +37,19 @@ archive), or for externally identiyfing sub-resources referenced by
 hypermedia formats.
 
 Examples:
- - <arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html>
- - <arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/>
- - <arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/>
- - <arcp://name,gallery.example.org/>
+ - `arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html`
+ - `arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/`
+ - `arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/`
+ - `arcp://name,gallery.example.org/`
 
 The different forms of URI authority_ in arcp URIs can be used depending
 on which uniqueness constraints to apply when addressing an archive.
 See the arcp_ specification (draft-soilandreyes-arcp) for details.
 
-Note that this library only provides mechanisms to parse and generate
-arcp URIs, and do _not_ integrate with the
-``zipfile`` or ``urllib.request`` modules.
+Note that this library only provides mechanisms to 
+*generate* and *parse* arcp URIs, and do *not* integrate with any 
+particular archive or URL handling modules like 
+``zipfile`` or ``urllib.request``.
 
 
 License
@@ -72,7 +73,7 @@ or an issue at <https://github.com/stain/arcp-py/issues>.
 Installing
 ----------
 
-You will need Python 3.4 or later (tested with 3.6).
+You will need Python 2.7, Python 3.4 or later (Recommended: 3.6).
 
 If you have pip_, then the easiest is normally to install from <https://pypi.org/project/arcp/> using::
 
