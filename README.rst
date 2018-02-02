@@ -12,6 +12,12 @@ Create/parse arcp_ (Archive and Package) URIs.
   :target: https://travis-ci.org/stain/arcp-py
 .. image:: https://img.shields.io/pypi/v/arcp.svg?maxAge=86400
   :target: https://pypi.org/project/arcp/
+.. image:: https://coveralls.io/repos/github/stain/arcp-py/badge.svg?branch=master
+  :target: https://coveralls.io/github/stain/arcp-py?branch=master
+.. image:: https://codecov.io/gh/stain/arcp-py/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/stain/arcp-py
+
+
 
 
 Introduction
