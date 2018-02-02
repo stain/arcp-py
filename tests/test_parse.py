@@ -142,3 +142,122 @@ class TestParse(unittest.TestCase):
     def test_parse_uuid_fails(self):
         with self.assertRaises(Exception):
             parse.parse_arcp("arcp://uuid,ecba06ed-WRONG/").uuid
+
+    def test_parse_ni(self):
+        self.assertEqual("sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk",
+             parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/").ni)
+        self.assertIsNone(
+            parse.parse_arcp("arcp://name,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/").ni)
+        self.assertIsNone(
+            parse.parse_arcp("arcp://sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/").ni)
+        
+    def test_parse_ni_uri(self):
+        self.assertEqual("ni:///sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk",
+             parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_uri())
+        self.assertIsNone(
+            parse.parse_arcp("arcp://name,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_uri())
+        self.assertIsNone(
+            parse.parse_arcp("arcp://sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_uri())
+        self.assertEqual("ni://example.com/sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk",
+             parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_uri("example.com"))
+
+    def test_parse_nih_uri(self):
+        self.assertEqual("nih:sha-256-120;532690-57e12f-e2b74b-a07c89-2560a2;f",
+             parse.parse_arcp("arcp://ni,sha-256-120;UyaQV-Ev4rdLoHyJJWCi/")
+                .nih_uri())
+        self.assertIsNone(
+            parse.parse_arcp("arcp://name,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .nih_uri())
+        self.assertIsNone(
+            parse.parse_arcp("arcp://sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .nih_uri())
+
+    def test_parse_ni_well_known(self):
+        self.assertEqual("/.well-known/ni/sha-256/f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk",
+             parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_well_known())
+        self.assertIsNone(
+            parse.parse_arcp("arcp://name,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_well_known())
+        self.assertIsNone(
+            parse.parse_arcp("arcp://sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_well_known())
+        self.assertEqual("http://example.com/.well-known/ni/sha-256/f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk",
+             parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .ni_well_known("http://example.com/"))
+
+    def test_parse_hash(self):
+        # sha256 of "Hello World!" in ascii
+        self.assertEqual(("sha-256", "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"),
+             parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .hash)
+        self.assertIsNone(
+            parse.parse_arcp("arcp://name,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .hash)
+        self.assertIsNone(
+            parse.parse_arcp("arcp://sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
+                .hash)
+        # md5 of "Hello World!" in ascii
+        self.assertEqual(("md5", "ed076287532e86365e841e92bfc50d8c"),
+             parse.parse_arcp("arcp://ni,md5;7Qdih1MuhjZehB6Sv8UNjA/")
+                .hash)
+
+    def test_parse_repr_ni(self):
+        u = parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/file?q=a#frag")
+        r = repr(u)
+        self.assertIn("scheme='arcp'", r)
+        self.assertIn("prefix='ni'", r)
+        self.assertIn("name='sha-256;f4OxZX", r)#..
+        self.assertIn("path='/file'", r)
+        self.assertIn("query='q=a'", r)
+        self.assertIn("fragment='frag'", r)
+        self.assertIn("ni='sha-256;f4OxZX", r)#..
+        self.assertIn("hash=('sha-256', '7f83b16", r)#..
+        self.assertNotIn("uuid=", r)
+
+    def test_parse_repr_uuid(self):
+        u = parse.parse_arcp("arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/")
+        r = repr(u)
+        self.assertIn("scheme='arcp'", r)
+        self.assertIn("prefix='uuid'", r)
+        self.assertIn("name='32a423d6-", r)#..
+        self.assertIn("path='/'", r)
+        self.assertIn("uuid=32a423d6-", r)# ..
+        self.assertIn("query=''", r)
+        self.assertIn("fragment=''", r)
+        self.assertNotIn("ni=", r)
+        self.assertNotIn("hash=", r)#..
+
+class NIH_CheckDigit(unittest.TestCase):
+    """Test _nih_checkdigit() using RFC6920 examples"""
+    def test_checkdigit(self):
+        self.assertEqual("f", parse._nih_checkdigit(
+          "5326-9057-e12f-e2b7-4ba0-7c89-2560-a2".replace("-", "")))
+        self.assertEqual("b", parse._nih_checkdigit("53269057"))                
+        self.assertEqual("0", parse._nih_checkdigit("b053269057"))
+        self.assertEqual("d", parse._nih_checkdigit("acefeed"))
+        self.assertEqual("0", parse._nih_checkdigit("dacefeed"))
+        self.assertEqual("4", parse._nih_checkdigit("123456789abcdef"))
+        self.assertEqual("0", parse._nih_checkdigit("4123456789abcdef"))
+        # Consistency check -- if we add $digit (or $digit0 for even-length) 
+        # in front, the new sum should be 0
+
+class NIH_Segmented(unittest.TestCase):
+    """Test _nih_segmented()"""
+    def test_segment(self):
+        self.assertEqual("532690-57e12f-e2b74b-a07c89-2560a2", 
+            parse._nih_segmented("53269057e12fe2b74ba07c892560a2"))
+        self.assertEqual("5326-9057-e12f-e2b7-4ba0-7c89-2560-a2", 
+            parse._nih_segmented("53269057e12fe2b74ba07c892560a2", 4))
+        self.assertEqual("532690-5", 
+            parse._nih_segmented("5326905"))
+        self.assertEqual("532690", 
+            parse._nih_segmented("532690"))
+        self.assertEqual("53269", 
+            parse._nih_segmented("53269"))
+        self.assertEqual("", 
+            parse._nih_segmented(""))
