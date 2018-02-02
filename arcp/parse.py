@@ -138,11 +138,13 @@ class ARCPParseResult(urlp.ParseResult):
         algval = self.name
         return algval
     
-    @property
     def ni_uri(self, authority=""):
-        """The ni URI if the prefix is "ni", otherwise None.
+        """The ni URI (RFC6920_) if the prefix is "ni", otherwise None.
         
-        If the authority parameter is provided, it will be used in the returned URI.
+        If the ``authority`` parameter is provided, 
+        it will be used in the returned URI.
+
+        .. _RFC6920: https://tools.ietf.org/search/rfc6920
         """
         ni = self.ni
         if ni is None:
@@ -150,42 +152,59 @@ class ARCPParseResult(urlp.ParseResult):
         s = ("ni", authority, ni, None, None)
         return urlp.urlunsplit(s)
 
-    @property
-    def nih_uri(self, authority=""):
-        """The nih URI if the prefix is "ni", otherwise None.
+
+    def nih_uri(self):
+        """The nih URI (RFC6920_) if the prefix is "ni", otherwise None.
         
-        If the authority parameter is provided, it will be used in the returned URI.
+        .. _RFC6920: https://tools.ietf.org/search/rfc6920
         """
         h = self.hash
         if h is None:
             return None
-        path = "%s;%s" % h
-        s = ("nih", authority, ni, path, None)
+        (hash_method, hash_hex) = h
+        
+        segmented = _nih_segmented(hash_hex)
+        checkdigit = _nih_checkdigit(hash_hex)
+
+        path = "%s;%s;%s" % (hash_method, segmented, checkdigit)
+        s = ("nih", None, path, None, None)
         return urlp.urlunsplit(s)
     
-    @property
     def ni_well_known(self, base=""):
-        """The ni .well_known URI if the prefix is "ni", otherwise None.
+        """The ni .well-known URI (RFC5785_) if the prefix is 
+        "ni", otherwise None.
 
-        The parameter base should be an absolute URI like 
-        ``"http://example.com/"``
+        The parameter ``base``, if provided, should be an absolute URI like 
+        ``"http://example.com/"`` - a relative URI is returned otherwise.
+
+        .. _RFC5785: https://tools.ietf.org/html/rfc5785
         """
-        ni = self.ni
-        if ni is None:
-            return None        
-        path = ".well-known/ni/" + ni 
-        return urlp.urljoin(base, path)
-        
-    @property
-    def hash(self):
-        """A tuple (hash_method,hash_hex) if the prefix is "ni", otherwise None.
-        """
-        ni = self.ni
-        if ni is None:
+        (method, hash_b64) = self._ni_split()        
+        if method is None:
             return None
+        
+        # .well-known is always at / (RFC5785)
+        path = "/.well-known/ni/%s/%s" % (method, hash_b64)
+        return urlp.urljoin(base, path)
+
+    def _ni_split(self):
+        ni = self.ni
+        if ni is None:
+            return (None,None)
         if not ";" in ni:
             raise Exception("invalid ni hash: %s" % ni)
         (method, hash_b64) = ni.split(";", 1)
+        return (method, hash_b64)
+        
+
+    @property
+    def hash(self):
+        """A tuple (hash_method,hash_hex) if the prefix is "ni", 
+        otherwise None.
+        """
+        (method, hash_b64) = self._ni_split()
+        if method is None:
+            return None
         # re-instate padding as urlsafe_base64decode is strict
         missing_padding = 4 - (len(hash_b64) % 4)
         hash_b64 += "=" * missing_padding
@@ -199,7 +218,7 @@ class ARCPParseResult(urlp.ParseResult):
         props += ["name='%s'" % self.name or ""]
 
         if self.uuid is not None:
-            props += ["uuid='%s'" % self.uuid]
+            props += ["uuid=%s" % self.uuid]
         if self.ni is not None:
             props += ["ni='%s'" % self.ni]
             # Avoid Exception in __repr__
@@ -214,3 +233,43 @@ class ARCPParseResult(urlp.ParseResult):
 
     def __str__(self):
         return geturl()
+
+def _nih_segmented(h, grouping=6):
+    segmented = []
+    while h:
+        segmented.append(h[:grouping])
+        h = h[grouping:]
+    return "-".join(segmented)
+
+def _nih_checkdigit(h):
+    """Luhn mod N algorithm in base 16 (hex).
+
+    ISO/IEC 7812-1:2006
+    https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
+    """
+    factor = 2
+    total = 0
+    base = 16
+    digits = len(h)        
+    # 0 if digits has even length, 1 if odd
+    # (as we start doubling with the very last digit)
+    parity = digits % 2
+    for x in range(digits):
+        digit = int(h[x], 16)            
+        if x % 2 != parity:
+            # double every second digit
+            digit *= 2
+            # slight less efficient, but more verbose:
+            # if > 16:
+            #   total += digit - 16 + 1
+            # else: 
+            #   total + digit
+            total += sum(divmod(digit, 16))
+        else:
+            # Not doubled, must be <16
+            total += digit
+    # checkdigit that needs to be added to total
+    # to get 0 after modulus
+    remainder = (16-total) % 16
+    # Return as hex digit
+    return "%x" % remainder
