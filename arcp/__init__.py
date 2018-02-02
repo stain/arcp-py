@@ -98,19 +98,26 @@ __author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"
 __copyright__   = "Copyright 2018 The University of Manchester"
 __license__     = "Apache License, version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>"
 
-SCHEME="arcp"
-def _register_scheme(scheme=SCHEME):
-    try:
-        import urllib.parse as urlp
-    except:
-        import urlparse as urlp
+ARCP="arcp"
+NI="ni"
+NIH="ni"
 
+try:
+    import urllib.parse as _urlp
+except:
+    import urlparse as _urlp
+
+def _register_scheme(scheme, *uses):
     """Ensure app scheme works with :func:`urllib.parse.urljoin` and friends"""    
-    for u in (urlp.uses_relative, urlp.uses_netloc, 
-              urlp.uses_params, urlp.uses_fragment):
+    for u in uses:
         if not scheme in u:
             u.append(scheme)
-_register_scheme()
+            
+_register_scheme(ARCP, _urlp.uses_relative, _urlp.uses_netloc, 
+                _urlp.uses_params, _urlp.uses_fragment) # arcp://a/b;c?d#e
+_register_scheme(NI, _urlp.uses_netloc) # ni://a/b
+_register_scheme(NIH) # nih:a;b
+
 
 # Convenience export of public functions
 from .parse import is_arcp_uri, parse_arcp
