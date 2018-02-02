@@ -219,6 +219,16 @@ class NameTest(unittest.TestCase):
         self.assertEqual("arcp://name,app.example.org/msgs/1?a=b&c=d#frag",
             generate.arcp_name("app.example.org", "/msgs/1", "a=b&c=d", "frag"))
 
+    def testInvalidName(self):
+        with self.assertRaises(Exception):
+            generate.arcp_name("example com")
+
+    def testExampleName(self):
+        # empty name is valid by the spec (TODO: should it be?)
+        self.assertEqual("arcp://name,/",
+            generate.arcp_name(""))
+            
+
 # Example from https://tools.ietf.org/html/rfc6920#section-8.1
 BYTES = "Hello World!".encode("ASCII")
 # echo -n "Hello World!" | sha256sum

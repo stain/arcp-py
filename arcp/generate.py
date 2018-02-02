@@ -72,7 +72,7 @@ def _reg_name_regex():
     sub_delims = r"[!$&'()*+,;=]"
 
     # reg-name    = *( unreserved / pct-encoded / sub-delims )    
-    reg_name = r"(" + unreserved + r"|" + pct_encoded + sub_delims + r")*"
+    reg_name = r"^(" + unreserved + r"|" + pct_encoded + sub_delims + r")*$"
     return re.compile(reg_name)
 _REG_NAME = _reg_name_regex()
 
