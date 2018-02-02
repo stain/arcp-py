@@ -38,6 +38,7 @@ except:
 
 from base64 import urlsafe_b64decode
 from binascii import hexlify
+import re
 
 SCHEME="arcp"
 
@@ -134,9 +135,9 @@ class ARCPParseResult(urlp.ParseResult):
         """The arcp ni string if the prefix is "ni", otherwise None."""
         if self.prefix != "ni":
             return None
-        # TODO: Validate algval?
-        algval = self.name
-        return algval
+        if not _ALG_VAL.match(self.name):
+            raise Exception("Invalid alg-val for ni, prefix: %s" % self.netloc)
+        return self.name
     
     def ni_uri(self, authority=""):
         """The ni URI (RFC6920_) if the prefix is "ni", otherwise None.
@@ -233,6 +234,22 @@ class ARCPParseResult(urlp.ParseResult):
 
     def __str__(self):
         return geturl()
+
+def _alg_val_regex():
+    """Compile regular expression for RFC6920 alg-val production
+
+    _RFC6920: https://www.ietf.org/rfc/rfc6920
+    """
+    # unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+    unreserved = r"[A-Za-z0-9-._~]"
+    # alg            = 1*unreserved
+    alg = r"(" + unreserved + r"+)"
+    # val            = 1*unreserved
+    val = r"(" + unreserved + r"+)"
+    # alg-val        = alg ";" val
+    alg_val = r"^" + alg + ";" + val + r"$"
+    return re.compile(alg_val)
+_ALG_VAL = _alg_val_regex()
 
 def _nih_segmented(h, grouping=6):
     segmented = []

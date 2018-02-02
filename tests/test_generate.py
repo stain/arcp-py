@@ -277,3 +277,4 @@ class HashTest(unittest.TestCase):
         h = md5(BYTES)
         with self.assertRaises(Exception):
             generate.arcp_hash(hash=h)
+

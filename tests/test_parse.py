@@ -150,7 +150,21 @@ class TestParse(unittest.TestCase):
             parse.parse_arcp("arcp://name,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/").ni)
         self.assertIsNone(
             parse.parse_arcp("arcp://sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/").ni)
-        
+
+    def test_parse_ni_invalid_fails(self):
+        # Below example is invalid as alg-val string 
+        # does not contain ;
+        with self.assertRaises(Exception):
+             parse.parse_arcp("arcp://ni,sha-256/").ni_uri()
+        with self.assertRaises(Exception):
+             parse.parse_arcp("arcp://ni,sha-256/").nih_uri()
+        with self.assertRaises(Exception):
+             parse.parse_arcp("arcp://ni,sha-256/").hash()
+        with self.assertRaises(Exception):
+             parse.parse_arcp("arcp://ni,sha-256/").ni_well_known()
+        with self.assertRaises(Exception):
+             parse.parse_arcp("arcp://ni,sha-256/").ni
+
     def test_parse_ni_uri(self):
         self.assertEqual("ni:///sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk",
              parse.parse_arcp("arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/")
@@ -231,6 +245,14 @@ class TestParse(unittest.TestCase):
         self.assertIn("fragment=''", r)
         self.assertNotIn("ni=", r)
         self.assertNotIn("hash=", r)#..
+
+class URLParse(unittest.TestCase):
+    """Test urlparse()"""
+    def test_urlparse(self):
+        self.assertEqual("name",
+            parse.urlparse("arcp://name,example.com/").prefix)
+        self.assertEqual("http",
+            parse.urlparse("http://example.com/").scheme)
 
 class NIH_CheckDigit(unittest.TestCase):
     """Test _nih_checkdigit() using RFC6920 examples"""
