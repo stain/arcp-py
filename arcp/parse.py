@@ -189,11 +189,14 @@ class ARCPParseResult(urlp.ParseResult):
         return urlp.urljoin(base, path)
 
     def _ni_split(self):
+        """Split self.ni:
+        """
         ni = self.ni
         if ni is None:
             return (None,None)
-        if not ";" in ni:
-            raise Exception("invalid ni hash: %s" % ni)
+        # Already checked by self.ni regex
+        #if not ";" in ni:
+        #    raise Exception("invalid ni hash: %s" % ni)
         (method, hash_b64) = ni.split(";", 1)
         return (method, hash_b64)
         
@@ -236,9 +239,9 @@ class ARCPParseResult(urlp.ParseResult):
         return geturl()
 
 def _alg_val_regex():
-    """Compile regular expression for RFC6920 alg-val production
+    """Compile regular expression for RFC6920_ alg-val production
 
-    _RFC6920: https://www.ietf.org/rfc/rfc6920
+    .. _RFC6920: https://www.ietf.org/rfc/rfc6920
     """
     # unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
     unreserved = r"[A-Za-z0-9-._~]"
@@ -252,6 +255,13 @@ def _alg_val_regex():
 _ALG_VAL = _alg_val_regex()
 
 def _nih_segmented(h, grouping=6):
+    """Segment hex-hash with dashes in nih style RFC6920_
+
+    >>> _nih_segmented("0123456789abcdef")
+    "012345-6789ab-cdef"
+
+    .. _RFC6920: https://www.ietf.org/rfc/rfc6920
+    """
     segmented = []
     while h:
         segmented.append(h[:grouping])
@@ -259,11 +269,12 @@ def _nih_segmented(h, grouping=6):
     return "-".join(segmented)
 
 def _nih_checkdigit(h):
-    """Luhn mod N algorithm in base 16 (hex).
+    """Luhn mod N algorithm in base 16 (hex) according to RFC6920_
 
-    ISO/IEC 7812-1:2006
-    https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
+    .. _RFC6920: https://www.ietf.org/rfc/rfc6920
     """
+    ## Adopted from https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm 
+    ## pseudocode
     factor = 2
     total = 0
     base = 16
