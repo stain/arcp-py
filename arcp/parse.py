@@ -236,7 +236,7 @@ class ARCPParseResult(urlp.ParseResult):
         return "ARCPParseResult(%s)" % ",".join(props)
 
     def __str__(self):
-        return geturl()
+        return self.geturl()
 
 def _alg_val_regex():
     """Compile regular expression for RFC6920_ alg-val production
