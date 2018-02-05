@@ -246,6 +246,12 @@ class TestParse(unittest.TestCase):
         self.assertNotIn("ni=", r)
         self.assertNotIn("hash=", r)#..
 
+    def test_parse_str_ni(self):
+        uri = "arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/file?q=a#frag"
+        u = parse.parse_arcp(uri)
+        self.assertEqual(uri, str(u))
+        
+
 class URLParse(unittest.TestCase):
     """Test urlparse()"""
     def test_urlparse(self):
