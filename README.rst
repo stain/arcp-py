@@ -168,6 +168,6 @@ regular `urlparse`:: python
 
 
 
-.. _arcp: https://tools.ietf.org/html/draft-soilandreyes-arcp-02
+.. _arcp: https://tools.ietf.org/html/draft-soilandreyes-arcp-03
 .. _pip: https://docs.python.org/3/installing/
-.. _authority: https://tools.ietf.org/id/draft-soilandreyes-arcp-02.html#rfc.section.4.1
+.. _authority: https://tools.ietf.org/id/draft-soilandreyes-arcp-03.html#rfc.section.4.1

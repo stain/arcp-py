@@ -86,6 +86,6 @@ If you want to install manually from this code base, then try::
 
 
 
-.. _arcp: https://tools.ietf.org/id/draft-soilandreyes-arcp-02.html
+.. _arcp: https://tools.ietf.org/id/draft-soilandreyes-arcp-03.html
 .. _pip: https://docs.python.org/3/installing/
-.. _authority: https://tools.ietf.org/id/draft-soilandreyes-arcp-02.html#rfc.section.4.1
+.. _authority: https://tools.ietf.org/id/draft-soilandreyes-arcp-03.html#rfc.section.4.1
