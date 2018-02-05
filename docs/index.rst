@@ -7,7 +7,7 @@ arcp (Archive and Package) URI Python library
    
    arcp
    generate
-S   parse
+   parse
 
 
 Indices and tables
