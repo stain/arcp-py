@@ -223,7 +223,7 @@ class NameTest(unittest.TestCase):
         with self.assertRaises(Exception):
             generate.arcp_name("example com")
 
-    def testExampleName(self):
+    def testEmptyName(self):
         # empty name is valid by the spec (TODO: should it be?)
         self.assertEqual("arcp://name,/",
             generate.arcp_name(""))
