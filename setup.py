@@ -31,7 +31,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
   name = 'arcp',
   packages = find_packages(exclude=['contrib', 'docs', 'tests']), # Required
-  version = '0.2.1.dev0',
+  version = '0.2.1',
   description = 'arcp (Archive and Package) URI parser and generator',
   long_description=long_description,
   author = 'Stian Soiland-Reyes',
