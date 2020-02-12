@@ -25,8 +25,8 @@ urllib.parse.urlparse() - supporting any URIs. If the URI is
 using the arcp: URI scheme, additional components are available
 as from parse_arcp().
 """
-__author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"
-__copyright__   = "Copyright 2018 The University of Manchester"
+__author__      = "Stian Soiland-Reyes <https://orcid.org/0000-0001-9842-9718>"
+__copyright__   = "Copyright 2018-2020 The University of Manchester"
 __license__     = "Apache License, version 2.0 (https://www.apache.org/licenses/LICENSE-2.0)"
 
 from uuid import UUID, NAMESPACE_URL

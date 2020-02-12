@@ -39,17 +39,18 @@ setup(
   
   # https://www.apache.org/licenses/LICENSE-2.0
   license = "Apache License, Version 2.0",
-  url = 'http://arcp.readthedocs.io/',
+  url = 'https://arcp.readthedocs.io/',
   download_url = 'https://github.com/stain/arcp-py/archive/0.1.0.tar.gz',
   keywords = "arcp uri url iri archive package",
   
   install_requires=[],
   classifiers=[
     # https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 3 - Alpha',
 
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
+    'Topic :: Software Development :: Libraries :: Python Modules',
      # 'License :: OSI Approved :: Apache Software License',
      # https://github.com/pypa/pypi-legacy/issues/564
     #'License :: OSI Approved',

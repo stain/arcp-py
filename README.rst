@@ -4,7 +4,7 @@ arcp-py
 Create/parse arcp_ (Archive and Package) URIs.
 
 .. image:: https://readthedocs.org/projects/arcp/badge/?version=latest
-  :target: http://arcp.readthedocs.io/en/latest/?badge=latest
+  :target: https://arcp.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1162749.svg
   :target: https://doi.org/10.5281/zenodo.1162749
@@ -91,7 +91,7 @@ If you want to install manually from this code base, then try::
 Usage
 ------
 
-For full documentation, see <http://arcp.readthedocs.io/> or use ``help(arcp)``
+For full documentation, see <https://arcp.readthedocs.io/> or use ``help(arcp)``
 
 This module provides functions for creating arcp_ URIs, 
 which can be used for identifying or parsing hypermedia 
