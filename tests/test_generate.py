@@ -149,7 +149,7 @@ class LocationTest(unittest.TestCase):
     """Test arcp_location()"""
     def testExampleZip(self):
         # URL and expected UUID as in
-        # https://tools.ietf.org/id/draft-soilandreyes-arcp-02.html#rfc.appendix.A.2
+        # https://tools.ietf.org/id/draft-soilandreyes-arcp-03.html#rfc.appendix.A.2
         self.assertEqual("arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/", 
             generate.arcp_location("http://example.com/data.zip"))
         self.assertEqual("arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/", 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-## Copyright 2018 Stian Soiland-Reyes, The University of Manchester, UK
+## Copyright 2018-2020 Stian Soiland-Reyes, The University of Manchester, UK
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
 ## you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ its location URL, facilitating a UUID v5 authority.
 :func:`arcp_name()` can be used to identify an archive based on its
 absolute DNS name or package name within an installation.
 
-.. _draft-soilandreyes-arcp: https://www.ietf.org/id/draft-soilandreyes-arcp
+.. _draft-soilandreyes-arcp: https://tools.ietf.org/id/draft-soilandreyes-arcp-03.html
 """
 
 __author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"

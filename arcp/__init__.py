@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-## Copyright 2018 Stian Soiland-Reyes, The University of Manchester, UK
+## Copyright 2018-2020 Stian Soiland-Reyes, The University of Manchester, UK
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
 ## you may not use this file except in compliance with the License.
@@ -91,11 +91,11 @@ as from :func:`parse_arcp`, otherwise the output is the same as from
       query='q=a', fragment='')
 
 
-.. _arcp: https://tools.ietf.org/html/draft-soilandreyes-arcp-02
+.. _arcp: https://tools.ietf.org/html/draft-soilandreyes-arcp-03
 """
 
-__author__      = "Stian Soiland-Reyes <http://orcid.org/0000-0001-9842-9718>"
-__copyright__   = "Copyright 2018 The University of Manchester"
+__author__      = "Stian Soiland-Reyes <https://orcid.org/0000-0001-9842-9718>"
+__copyright__   = "Copyright 2018-2020 The University of Manchester"
 __license__     = "Apache License, version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>"
 
 ARCP="arcp"
